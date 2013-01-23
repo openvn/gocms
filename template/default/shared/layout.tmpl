@@ -1,0 +1,8 @@
+<!DOCTYPE HTML>
+<html>
+<title>{{.Foo}}</title>
+<body>
+{{template "menu.tmpl"}}
+layout:{{template "page" .}} {{resource "acb"}}, {{lang "index.lang" "key1"}}, {{langset "vi" "index.lang" "key1"}}
+</body>
+</html>

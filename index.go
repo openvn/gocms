@@ -2,6 +2,7 @@ package main
 
 func IndexRouter(c *Controller) {
 	p := c.Request().URL.Path
+	//BUG
 	if "/" == p {
 		Index(c)
 	} else if "/view/" == p {

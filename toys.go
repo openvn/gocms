@@ -7,11 +7,16 @@ import (
 	"github.com/openvn/toys/view"
 	"labix.org/v2/mgo"
 	"net/http"
+	"path"
 )
 
 const (
 	dbname string = "test"
 )
+
+//var (
+//	decodeForm = schema.NewDecoder()
+//)
 
 type Controller struct {
 	toys.Controller
@@ -19,6 +24,10 @@ type Controller struct {
 	auth membership.Authenticater
 	tmpl *view.View
 	db   *DBCtx
+}
+
+func (c *Controller) View(page string, data interface{}) {
+	c.tmpl.Load(c, page, data)
 }
 
 type Handler struct {
@@ -67,4 +76,13 @@ func NewHandler(f func(c *Controller), dbsess *mgo.Session, tmpl *view.View) *Ha
 	h.fn = f
 
 	return h
+}
+
+// Match is a wrapper function for path.Math
+func Match(pattern, name string) bool {
+	ok, err := path.Match(pattern, name)
+	if err != nil {
+		return false
+	}
+	return ok
 }

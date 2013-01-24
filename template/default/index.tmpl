@@ -1,4 +1,12 @@
 {{define "page"}}
-index  {{test}}: <b>{{.Bar}}</b>
-{{template "menu.tmpl"}}
+	{{range .Inf}}
+		<div>
+			<h1><a href="/view/cat.html?id={{.CatId}}">{{.CatName}}</a></h1>
+			<article>
+				<h2><a href="/view/post.html?id={{.LastEntryId}}">{{.LastEntryName}}</a></h2>
+				<p>{{.LastEntryDescription}}</p>
+			</article>
+		</div>
+		<hr />
+	{{end}}
 {{end}}

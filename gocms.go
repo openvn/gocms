@@ -17,17 +17,32 @@ func main() {
 	defer dbsess.Close()
 
 	//multi language support
-	lang := locale.NewLang("/home/nvcnvn/WorkSpace/test/temp/language")
+	lang := locale.NewLang("language")
 	lang.Parse("vi")
 	lang.Parse("en")
 
 	//view template system
-	tmpl := view.NewView("/home/nvcnvn/WorkSpace/test/temp/template")
-	tmpl.Resource = "//localhost:8080/static"
+	tmpl := view.NewView("template")
+	tmpl.Resource = "//localhost:8080/statics"
 	tmpl.SetLang(lang)
 	tmpl.Parse("default")
 
 	//routing
-	http.Handle("/", NewHandler(IndexRouter, dbsess, tmpl))
+	http.Handle("/statics/", http.StripPrefix("/statics/", http.FileServer(http.Dir("statics"))))
+	http.Handle("/", NewHandler(Router, dbsess, tmpl))
 	http.ListenAndServe("localhost:8080", nil)
+}
+
+func Router(c *Controller) {
+	p := c.Request().URL.Path
+
+	if Match("/admin/*", p) {
+		Admin(c)
+	} else if Match("/user/*", p) {
+		Loggin(c)
+	} else if Match("/view/*", p) {
+		View(c)
+	} else {
+		Index(c)
+	}
 }

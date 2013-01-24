@@ -1,0 +1,21 @@
+{{define "page"}}
+<form action="/admin/post_submit.html" method="POST">
+	<label for="title">Title:</label>
+	<input type="text" id="title" name="title" /></br />
+	<label for="description">Description:</label>
+	<input type="text" id="description" name="description" /></br />
+	<label for="content">Content:</label>
+	<textarea id="content" name="content"></textarea></br />
+	<label>Tags:</label>
+	<input type="text" name="tag0" />
+	<input type="text" name="tag1" />
+	<input type="text" name="tag2" /></br />
+	<label for="catid">Catergory:</label>
+	<select id="catid" name="catid">
+{{range .Cats}}
+		<option value="{{.CatId.Hex}}">{{.Name}}</option>
+{{end}}
+	</select><br />
+	<input type="submit" name="submit" value="Add" />
+</form>
+{{end}}

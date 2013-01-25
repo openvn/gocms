@@ -25,11 +25,12 @@ func main() {
 	tmpl := view.NewView("template")
 	tmpl.Resource = "//localhost:8080/statics"
 	tmpl.SetLang(lang)
+	tmpl.AddFunc("catlst", func() string { return "bbbbb" })
 	tmpl.Parse("default")
 
 	//routing
-	http.Handle("/statics/", http.StripPrefix("/statics/", http.FileServer(http.Dir("statics"))))
 	http.Handle("/", NewHandler(Router, dbsess, tmpl))
+	http.Handle("/statics/", http.StripPrefix("/statics/", http.FileServer(http.Dir("statics"))))
 	http.ListenAndServe("localhost:8080", nil)
 }
 

@@ -1,20 +1,15 @@
 package main
 
 import (
+	"github.com/openvn/gocms/dbctx"
 	"time"
 )
 
 func Admin(c *Controller) {
-	//_, err := c.auth.GetUser()
-	//if err != nil {
-	//	//not logged user, redirect
-	//	c.Redirect("/", 307)
-	//	return
-	//}
 	p := c.Request().URL.Path
 
 	if "/admin/post_submit.html" == p {
-		entry := Entry{}
+		entry := dbctx.Entry{}
 		entry.Description = c.Post("description", true)
 		entry.Title = c.Post("title", true)
 		entry.Content = c.Post("content", true)
@@ -33,7 +28,7 @@ func Admin(c *Controller) {
 	} else if "/admin/post.html" == p {
 		data := struct {
 			Title string
-			Cats  []Catergory
+			Cats  []dbctx.Catergory
 		}{
 			"Post new",
 			c.db.AllCats(),
@@ -41,9 +36,13 @@ func Admin(c *Controller) {
 		c.View("post.tmpl", data)
 	} else if "/admin/cat_submit.html" == p {
 		if len(c.Post("submit", false)) > 0 {
-			cat := Catergory{}
+			cat := dbctx.Catergory{}
 			cat.Name = c.Post("name", true)
+			if c.db.IsValidId(c.Post("parent", false)) {
+				cat.Parent = c.db.DecodeId(c.Post("parent", false))
+			}
 			err := c.db.SaveCat(&cat)
+
 			if err != nil {
 				c.Print(err.Error())
 			} else {
@@ -51,8 +50,16 @@ func Admin(c *Controller) {
 			}
 		}
 	} else if "/admin/cat.html" == p {
-		println("admin cat")
-		c.View("cat.tmpl", nil)
+		data := struct {
+			Title    string
+			MainCats []dbctx.Catergory
+			Cats     []dbctx.Catergory
+		}{
+			"Add new Cat",
+			c.db.AllMainCats(),
+			c.db.CatTree(c.db.DecodeId("")),
+		}
+		c.View("cat.tmpl", &data)
 	} else {
 		c.Print("???")
 	}

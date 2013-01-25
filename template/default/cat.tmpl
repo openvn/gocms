@@ -1,7 +1,30 @@
 {{define "page"}}
+<ul>
+	{{range .Cats}}
+		<li class="cat_lv{{len .Ancestors}}">
+			<a class="cat_name" data="{{.CatId.Hex}}">{{.Name}}</a>
+		</li>
+	{{end}}
+</ul>
 <form action="/admin/cat_submit.html" method="POST">
 	<label for="name">Catergory name:</label>
-	<input type="text" name="name" /><br />
-	<input type="submit" name="submit" value="Add" />
-</form> 
+	<input type="text" id="name" name="name" /><br />
+	<input type="submit" id="submit" name="submit" value="Add" />
+</form>
+<script type="text/javascript">
+$(".cat_name").click(function(){
+	var a = $(this)
+	$.getJSON('/view/catlst.html',
+	{
+		id : a.attr("data")
+	},
+	function(data) {
+		var u = $('<ul></ul>')
+		$.each(data, function(key, val) {
+			u.append('<li>'+val.Name+'</li>');
+		});
+		a.after(u);
+	});
+})
+</script>
 {{end}}

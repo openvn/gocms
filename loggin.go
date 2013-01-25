@@ -10,7 +10,10 @@ func Loggin(c *Controller) {
 			return
 		}
 
-		c.auth.LogginUser(u.Id.Hex(), 0)
+		err = c.auth.LogginUser(u.Id.Hex(), 0)
+		if err != nil {
+			c.Print("err loggin", err.Error())
+		}
 	} else if "/user/add" == uripath {
 		var name string
 		u, err := c.auth.GetUser()
@@ -26,7 +29,7 @@ func Loggin(c *Controller) {
 			"loggin",
 			name,
 		}
-		c.View("adduser.tmpl", data)
+		c.View("adduser.tmpl", &data)
 	} else if "/user/add2" == uripath {
 		if len(c.Post("submit", false)) > 0 {
 			c.auth.AddUser(

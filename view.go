@@ -1,5 +1,10 @@
 package main
 
+import (
+	"encoding/json"
+	"github.com/openvn/gocms/dbctx"
+)
+
 func View(c *Controller) {
 	uripath := c.Request().URL.Path
 	if "/view/post.html" == uripath {
@@ -8,16 +13,22 @@ func View(c *Controller) {
 		if err == nil {
 			data := struct {
 				Title string
-				Entry *Entry
+				Entry *dbctx.Entry
 			}{
 				"View",
 				entry,
 			}
-			c.View("viewpost.tmpl", data)
+			c.View("viewpost.tmpl", &data)
 		} else {
 			c.Print(err.Error())
 		}
-	} else if "/view/cat.html" == uripath {
-
+	} else if "/view/catlst.html" == uripath {
+		id := c.Get("id", false)
+		b, err := json.Marshal(c.db.CatTree(c.db.DecodeId(id)))
+		if err != nil {
+			c.Print(err.Error())
+			return
+		}
+		c.Write(b)
 	}
 }

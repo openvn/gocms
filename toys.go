@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/openvn/gocms/dbctx"
 	"github.com/openvn/toys"
 	"github.com/openvn/toys/secure/membership"
 	"github.com/openvn/toys/secure/membership/session"
@@ -23,7 +24,7 @@ type Controller struct {
 	sess session.Provider
 	auth membership.Authenticater
 	tmpl *view.View
-	db   *DBCtx
+	db   *dbctx.DBCtx
 }
 
 func (c *Controller) View(page string, data interface{}) {
@@ -58,11 +59,11 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//web authenthicator
 	c.auth = membership.NewAuthDBCtx(w, r, c.sess, userColl, rememberColl)
 
+	//database context
+	c.db = dbctx.NewDBCtx(catColl, entryColl, commColl)
+
 	//view template
 	c.tmpl = h.tmpl
-
-	//database context
-	c.db = NewDBCtx(entryColl, catColl, commColl)
 
 	//process
 	h.fn(&c)

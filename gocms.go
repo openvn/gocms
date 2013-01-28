@@ -12,8 +12,12 @@ import (
 
 func main() {
 	ip := os.Getenv("OPENSHIFT_INTERNAL_IP")
+	mongoHost := os.Getenv("OPENSHIFT_MONGODB_DB_HOST")
+	mongoPort := os.Getenv("OPENSHIFT_MONGODB_DB_PORT")
+	mongoUser := os.Getenv("OPENSHIFT_MONGODB_DB_USERNAME")
+	mongoPass := os.Getenv("OPENSHIFT_MONGODB_DB_PASSWORD")
 	//database session
-	dbsess, err := mgo.Dial(ip)
+	dbsess, err := mgo.Dial(fmt.Sprintf("mongodb://%s:%s@%s:%s", mongoUser,mongoPass,mongoHost,mongoPort))
 	if err != nil {
 		panic(err)
 	}

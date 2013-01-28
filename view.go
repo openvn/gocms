@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/openvn/gocms/dbctx"
 )
 
 func View(c *Controller) {
@@ -11,13 +10,9 @@ func View(c *Controller) {
 		id := c.Get("id", false)
 		entry, err := c.db.FindPost(id)
 		if err == nil {
-			data := struct {
-				Title string
-				Entry *dbctx.Entry
-			}{
-				"View",
-				entry,
-			}
+			data := c.NewViewData(entry.Title)
+			data["Entry"] = entry
+			data["CatString"], _ = c.db.CatString(entry.CatId)
 			c.View("viewpost.tmpl", &data)
 		} else {
 			c.Print(err.Error())

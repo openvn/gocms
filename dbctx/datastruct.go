@@ -5,29 +5,82 @@ import (
 	"time"
 )
 
-type Catergory struct {
-	CatId     bson.ObjectId `bson:"_id"`
-	Name      string
-	Ancestors []bson.ObjectId `bson:",omitempty"`
-	Parent    bson.ObjectId   `bson:",omitempty"`
-	LastEntry bson.ObjectId   `bson:",omitempty"`
+type Role string
+
+var DefaultRole [28]Role = [28]Role{
+	"Chủ hộ",
+	"Ông",
+	"Bà",
+	"Ông cố",
+	"Bà cố",
+	"Ông nội",
+	"Bà nội",
+	"Ông ngoại",
+	"Bà ngoại",
+	"Cha",
+	"Mẹ",
+	"Cha chồng",
+	"Mẹ chồng",
+	"Cha vợ",
+	"Mẹ vợ",
+	"Anh",
+	"Chị",
+	"Em",
+	"Anh rễ",
+	"Chị dâu",
+	"Em họ",
+	"Anh họ",
+	"Chị họ",
+	"Em rễ",
+	"Em dâu",
+	"Con",
+	"Cháu",
+	"Khác",
 }
 
-type Entry struct {
-	EntryId     bson.ObjectId `bson:"_id"`
-	Description string
-	Title       string
-	Content     string
-	At          time.Time
-	NumView     int
-	Tags        []string
-	CatId       bson.ObjectId `bson:",omitempty"`
+type Class struct {
+	Title  string
+	School string
 }
 
-type Comment struct {
-	CommId  bson.ObjectId `bson:"_id"`
-	Content string
-	By      string
-	At      time.Time
-	EntryId bson.ObjectId `bson:",omitempty"`
+type Work struct {
+	Title  string
+	Office string
+}
+
+type Income struct {
+	Amount int
+	Form   string
+}
+
+type Person struct {
+	PersonId        bson.ObjectId `bson:"_id"`
+	Role            Role
+	FullName        string
+	Gender          bool
+	Birth           time.Time
+	Quals           int
+	Area            string
+	Orgs            []string
+	AttendingSchool bool
+	Class           Class `bson:",omitempty"`
+	Working         bool
+	Work            Work `bson:",omitempty"`
+	AvgIncome       int
+	Incomes         []Income `bson:",omitempty"`
+	Desire          string   `bson:",omitempty"`
+	HI              int
+	Note            string `bson:",omitempty"`
+}
+
+type House struct {
+	HouseId  bson.ObjectId `bson:"_id"`
+	Group    int
+	Block    int
+	Ward     string `bson:",omitempty"`
+	District string `bson:",omitempty"`
+	City     string `bson:",omitempty"`
+	Street   string `bson:",omitempty"`
+	Address  string `bson:",omitempty"`
+	Member   []Person
 }

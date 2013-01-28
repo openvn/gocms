@@ -1,7 +1,14 @@
 {{if .}}
-<ul id="catlist">
+<ul>
 	{{range .}}
-	<li>{{.Name}}</li>
+	<li>
+		<a>{{.Name}}</a>
+		{{if .Children}}
+		<ul>
+
+		</ul>
+		{{end}}
+	</li>
 	{{end}}
 </ul>
 {{end}}

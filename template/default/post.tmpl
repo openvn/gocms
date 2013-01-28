@@ -1,21 +1,34 @@
 {{define "page"}}
 <form action="/admin/post_submit.html" method="POST">
-	<label for="title">Title:</label>
-	<input type="text" id="title" name="title" /></br />
-	<label for="description">Description:</label>
-	<input type="text" id="description" name="description" /></br />
-	<label for="content">Content:</label>
-	<textarea id="content" name="content"></textarea></br />
-	<label>Tags:</label>
-	<input type="text" name="tag0" />
-	<input type="text" name="tag1" />
-	<input type="text" name="tag2" /></br />
-	<label for="catid">Catergory:</label>
-	<select id="catid" name="catid">
+	<div class="form_settings">
+		<p>
+			<span><label for="title">Title:</label></span>
+			<input class="contact" type="text" name="title" />
+		</p>
+		<p>
+			<span><label for="description">Description:</label></span>
+			<input class="contact" type="text" name="description" />
+		</p>
+		<p>
+			<span><label for="content">Content:</label></span>
+			<textarea class="contact textarea" rows="8" cols="50" name="content"></textarea>
+		</p>
+		<p>
+			<span><label for="catid">Catergory:</label></span>
+			<select id="catid" name="catid">
 {{range .Cats}}
-		<option value="{{.CatId.Hex}}">{{.Name}}</option>
+				<option value="{{.CatId.Hex}}">{{.Name}}</option>
 {{end}}
-	</select><br />
-	<input type="submit" name="submit" value="Add" />
+			</select>
+		</p>
+		<p>
+			<span><label>Tags:</label></span>
+			<input type="text" name="tags" />
+		</p>
+		<p style="padding-top: 15px">
+			<span>&nbsp;</span>
+			<input class="submit" type="submit" name="submit" value="submit">
+		</p>
+	</div>
 </form>
 {{end}}

@@ -41,6 +41,7 @@ func Loggin(c *Controller) {
 		}
 		c.Redirect("/user/", 307)
 	} else {
-		c.View("loggin.tmpl", nil)
+		data := c.NewViewData("Loggin")
+		c.View("loggin.tmpl", data)
 	}
 }

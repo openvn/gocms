@@ -37,7 +37,11 @@ func main() {
 func Router(c *Controller) {
 	p := c.Request().URL.Path
 
-	if Match("/admin/*", p) {
+	if Match("/admin/data/*", p) {
+		Data(c)
+	} else if Match("/contact/*", p) {
+		Contact(c)
+	} else if Match("/admin/*", p) {
 		Admin(c)
 	} else if Match("/user/*", p) {
 		Loggin(c)

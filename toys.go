@@ -15,16 +15,21 @@ const (
 	dbname string = "test"
 )
 
-//var (
-//	decodeForm = schema.NewDecoder()
-//)
-
 type Controller struct {
 	toys.Controller
 	sess session.Provider
 	auth membership.Authenticater
 	tmpl *view.View
 	db   *dbctx.DBCtx
+}
+
+func (c *Controller) NewViewData(title string) map[string]interface{} {
+	m := make(map[string]interface{})
+	m["Title"] = title
+	m["MainCats"] = c.db.AllMainCats()
+	m["AllTags"] = c.db.AllTags()
+	m["DBCtx"] = c.db
+	return m
 }
 
 func (c *Controller) View(page string, data interface{}) {
@@ -52,6 +57,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	entryColl := database.C("toysEntry")
 	catColl := database.C("toysCat")
 	commColl := database.C("toysComm")
+	tagColl := database.C("toysTag")
+	contColl := database.C("toysCont")
+	houseColl := database.C("toysHouse")
+	personColl := database.C("toysPerson")
 
 	//web session
 	c.sess = session.NewMgoProvider(w, r, sessColl)
@@ -60,7 +69,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c.auth = membership.NewAuthDBCtx(w, r, c.sess, userColl, rememberColl)
 
 	//database context
-	c.db = dbctx.NewDBCtx(catColl, entryColl, commColl)
+	c.db = dbctx.NewDBCtx(catColl, entryColl, commColl, tagColl, contColl,
+		houseColl, personColl)
 
 	//view template
 	c.tmpl = h.tmpl

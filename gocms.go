@@ -6,11 +6,14 @@ import (
 	"github.com/openvn/toys/view"
 	"labix.org/v2/mgo"
 	"net/http"
+	"os"
+	"fmt"
 )
 
 func main() {
+	ip := os.Getenv("OPENSHIFT_INTERNAL_IP")
 	//database session
-	dbsess, err := mgo.Dial("localhost")
+	dbsess, err := mgo.Dial(ip)
 	if err != nil {
 		panic(err)
 	}
@@ -31,7 +34,7 @@ func main() {
 	//routing
 	http.Handle("/", NewHandler(Router, dbsess, tmpl))
 	http.Handle("/statics/", http.StripPrefix("/statics/", http.FileServer(http.Dir("statics"))))
-	http.ListenAndServe("localhost:8080", nil)
+	http.ListenAndServe(fmt.Sprintf("%s:8080", ip), nil)
 }
 
 func Router(c *Controller) {

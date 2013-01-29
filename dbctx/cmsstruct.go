@@ -53,4 +53,5 @@ type Contact struct {
 	From      string
 	To        string
 	At        time.Time
+	New       bool
 }

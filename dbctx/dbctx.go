@@ -223,3 +223,18 @@ func (ctx *DBCtx) CatString(id bson.ObjectId) ([]Catergory, error) {
 	ancestors = append(ancestors, cat)
 	return ancestors, nil
 }
+
+func (ctx *DBCtx) AddContact(c *Contact) error {
+	c.ContactId = bson.NewObjectId()
+	c.At = time.Now()
+	return ctx.contColl.Insert(c)
+}
+
+func (ctx *DBCtx) AllContact(offset bson.ObjectId, limit int) []Contact {
+	conts := []Contact{}
+	if offset.Valid() {
+		ctx.contColl.Find(bson.M{"_id": bson.M{"$gt": offset}}).Limit(limit).All(&conts)
+	}
+	ctx.contColl.Find(nil).Limit(limit).All(&conts)
+	return conts
+}

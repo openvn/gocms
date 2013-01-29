@@ -64,6 +64,7 @@ func Admin(c *Controller) {
 	} else if "/admin/theme.html" == p {
 		c.tmpl.Parse("default")
 	} else {
-		c.Print("???")
+		data := c.NewViewData("Admin Index")
+		c.View("adminindex.tmpl", data)
 	}
 }

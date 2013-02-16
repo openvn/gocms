@@ -1,4 +1,4 @@
-package main
+package gocms
 
 func Index(c *Controller) {
 	data := c.NewViewData("Index")

@@ -1,4 +1,4 @@
-package main
+package gocms
 
 import (
 	"github.com/openvn/gocms/dbctx"
@@ -9,6 +9,7 @@ import (
 	"labix.org/v2/mgo"
 	"net/http"
 	"path"
+	"time"
 )
 
 const (
@@ -53,14 +54,13 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	database := dbsess.DB(dbname)
 	sessColl := database.C("toysSession")
 	userColl := database.C("toysUser")
+
 	rememberColl := database.C("toysUserRemember")
 	entryColl := database.C("toysEntry")
 	catColl := database.C("toysCat")
 	commColl := database.C("toysComm")
 	tagColl := database.C("toysTag")
 	contColl := database.C("toysCont")
-	houseColl := database.C("toysHouse")
-	personColl := database.C("toysPerson")
 
 	//web session
 	c.sess = session.NewMgoProvider(w, r, sessColl)
@@ -69,8 +69,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c.auth = membership.NewAuthDBCtx(w, r, c.sess, userColl, rememberColl)
 
 	//database context
-	c.db = dbctx.NewDBCtx(catColl, entryColl, commColl, tagColl, contColl,
-		houseColl, personColl)
+	c.db = dbctx.NewDBCtx(catColl, entryColl, commColl, tagColl, contColl)
 
 	//view template
 	c.tmpl = h.tmpl
@@ -85,6 +84,16 @@ func NewHandler(f func(c *Controller), dbsess *mgo.Session, tmpl *view.View) *Ha
 	h.dbsess = dbsess
 	h.tmpl = tmpl
 	h.fn = f
+
+	dbsess.DB(dbname).C("toysSession").EnsureIndex(mgo.Index{
+		Key:         []string{"lastactivity"},
+		ExpireAfter: 7200 * time.Second,
+	})
+
+	dbsess.DB(dbname).C("toysUser").EnsureIndex(mgo.Index{
+		Key:    []string{"email"},
+		Unique: true,
+	})
 
 	return h
 }

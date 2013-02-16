@@ -105,6 +105,7 @@ $("#dialog-form-add").dialog({
 		}
 	},
 	close: function() {
+		$("#cat_name").val('');
 		$('#cat_form').validate().resetForm();
 	}
 });

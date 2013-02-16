@@ -1,4 +1,4 @@
-package main
+package gocms
 
 import (
 	"encoding/json"
@@ -25,5 +25,13 @@ func View(c *Controller) {
 			return
 		}
 		c.Write(b)
+	} else if "/view/find.html" == uripath {
+		tag := c.Get("tag", false)
+		println(tag)
+		data := c.NewViewData("Post with tag: " + tag)
+		if len(tag) > 0 {
+			data["Entrys"] = c.db.EntryByTag(tag, c.db.DecodeId(""), 10)
+		}
+		c.View("entrytag.tmpl", data)
 	}
 }

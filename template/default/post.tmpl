@@ -9,15 +9,16 @@
 			<span><label for="description">Description:</label></span>
 			<input class="contact" type="text" name="description" />
 		</p>
-		<p>
-			<span><label for="content">Content:</label></span>
-			<textarea class="contact textarea" rows="8" cols="50" name="content"></textarea>
-		</p>
+		<div style="padding: 10px 0 10px 0;">
+			<textarea rows="8" cols="50" id="content_area" name="content"></textarea>
+		</div>
 		<p>
 			<span><label for="catid">Catergory:</label></span>
 			<select id="catid" name="catid">
 {{range .Cats}}
-				<option value="{{.CatId.Hex}}">{{.Name}}</option>
+				<optgroup label="{{.Root.Name}}">
+				{{template "catoptlst.tmpl" .}}
+				</optgroup>
 {{end}}
 			</select>
 		</p>
@@ -31,4 +32,15 @@
 		</p>
 	</div>
 </form>
+<link rel="stylesheet" href="/statics/css/sceditor.default.css" />
+<script src="/statics/js/jquery.sceditor.bbcode.min.js"></script>
+<script>
+$("#content_area").sceditor({
+	width: 511,
+	height: 300,
+	plugins: 'bbcode',
+	emoticonsRoot: '/statics/images/',
+	style: "/statics/css/jquery.sceditor.default.min.css"
+});
+</script>
 {{end}}

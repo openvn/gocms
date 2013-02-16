@@ -1,0 +1,9 @@
+{{if .}}
+<ul>
+	{{range .}}
+	<li>
+		<a href="/view/find.html?tag={{.Name}}">{{.Name}}</a>
+	</li>
+	{{end}}
+</ul>
+{{end}}

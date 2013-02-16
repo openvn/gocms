@@ -7,6 +7,12 @@
 <article>
 	<h1>{{.Entry.Title}}</h1>
 	<p>{{.Entry.Description}}</p>
-	<p>{{.Entry.Content}}</p>
+	<hr>
+	<p id="content_display">{{.Entry.Content}}</p>
 </article>
+<script src="/statics/js/jquery.sceditor.bbcode.min.js"></script>
+<script>
+parser = new $.sceditor.BBCodeParser($.sceditor.BBCodeParser.defaults);
+$("#content_display").html(parser.toHTML($("#content_display").text()));
+</script>
 {{end}}

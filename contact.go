@@ -1,4 +1,4 @@
-package main
+package gocms
 
 import (
 	"github.com/openvn/gocms/dbctx"

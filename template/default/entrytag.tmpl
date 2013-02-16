@@ -1,0 +1,8 @@
+{{define "page"}}
+{{range .Entrys}}
+<article>
+	<h2><a href="{{.EntryId.Hex}}">{{.Title}}</a></h2>
+	<p>{{.Description}}</p>
+</article>
+{{end}}
+{{end}}

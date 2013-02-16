@@ -1,11 +1,22 @@
 {{define "page"}}
-<form action="/user/loggin" method="POST">
-	<label for="email">Email:</label>
-	<input type="text" id="email" name="email"  /><br />
-	<label for="password">Password:</label>
-	<input type="password" id="password" name="password" /><br />
-	<label for="remember">Remember?</label>
-	<input type="checkbox" id="remember" name="remember" /><br />
-	<input type="submit" name="submit" value="Loggin" />
+<form action="/user/loggin.html" method="POST">
+	<div class="form_settings">
+		<p>
+			<span><label for="email">Email:</label></span>
+			<input type="text" id="email" name="email" />
+		</p>
+		<p>
+			<span><label for="password">Password:</label></span>
+			<input type="password" id="password" name="password" />
+		</p>
+		<p>
+			<span><label for="remember">Remember?</label></span>
+			<input type="checkbox" id="remember" value="1" name="remember" />
+		</p>
+		<p style="padding-top: 15px">
+			<span>&nbsp;</span>
+			<input class="submit" type="submit" name="submit" value="Loggin">
+		</p>
+	</div>
 </form>
 {{end}}

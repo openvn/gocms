@@ -1,0 +1,7 @@
+{{if .Deep}}
+<option value="{{.Root.CatId.Hex}}">{{indent "--|" .Deep}} {{.Root.Name}}</option>
+{{end}}
+{{$lst := .}}
+{{range .Root.Children}}
+	{{template "catoptlst.tmpl" $lst.New .}}
+{{end}}

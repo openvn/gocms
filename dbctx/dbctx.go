@@ -8,25 +8,21 @@ import (
 )
 
 type DBCtx struct {
-	entryColl  *mgo.Collection
-	catColl    *mgo.Collection
-	commColl   *mgo.Collection
-	tagColl    *mgo.Collection
-	contColl   *mgo.Collection
-	houseColl  *mgo.Collection
-	personColl *mgo.Collection
+	entryColl *mgo.Collection
+	catColl   *mgo.Collection
+	commColl  *mgo.Collection
+	tagColl   *mgo.Collection
+	contColl  *mgo.Collection
 }
 
 // NewDBCtx receive 3 *mgo.Collection for catergorys, entrys and comments
-func NewDBCtx(cat, entry, comm, tag, cont, house, person *mgo.Collection) *DBCtx {
+func NewDBCtx(cat, entry, comm, tag, cont *mgo.Collection) *DBCtx {
 	ctx := &DBCtx{}
 	ctx.entryColl = entry
 	ctx.catColl = cat
 	ctx.commColl = comm
 	ctx.tagColl = tag
 	ctx.contColl = cont
-	ctx.houseColl = house
-	ctx.personColl = person
 	return ctx
 }
 
@@ -146,7 +142,7 @@ func (ctx *DBCtx) CatTree(root bson.ObjectId) []Catergory {
 	var query *mgo.Query
 
 	if root.Valid() {
-		query = ctx.catColl.Find(bson.M{"parent": root})
+		query = ctx.catColl.Find(bson.M{"ancestors": root})
 	} else {
 		query = ctx.catColl.Find(bson.M{"parent": bson.M{"$exists": false}})
 	}
@@ -234,7 +230,22 @@ func (ctx *DBCtx) AllContact(offset bson.ObjectId, limit int) []Contact {
 	conts := []Contact{}
 	if offset.Valid() {
 		ctx.contColl.Find(bson.M{"_id": bson.M{"$gt": offset}}).Limit(limit).All(&conts)
+	} else {
+		ctx.contColl.Find(nil).Limit(limit).All(&conts)
 	}
-	ctx.contColl.Find(nil).Limit(limit).All(&conts)
 	return conts
+}
+
+func (ctx *DBCtx) EntryByTag(tag string, offset bson.ObjectId, limit int) []Entry {
+	entrys := []Entry{}
+	if offset.Valid() {
+		ctx.entryColl.Find(bson.M{
+			"_id":  bson.M{"$gt": offset},
+			"tags": tag,
+		}).Limit(limit).All(&entrys)
+	} else {
+		ctx.entryColl.Find(bson.M{"tags": tag}).Limit(limit).All(&entrys)
+	}
+	println(len(entrys))
+	return entrys
 }

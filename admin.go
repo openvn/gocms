@@ -1,4 +1,4 @@
-package main
+package gocms
 
 import (
 	"encoding/json"
@@ -9,7 +9,11 @@ import (
 
 func Admin(c *Controller) {
 	p := c.Request().URL.Path
-
+	_, err := c.auth.GetUser()
+	if err != nil {
+		c.Print("Loogin required!")
+		return
+	}
 	if "/admin/post_submit.html" == p {
 		entry := dbctx.Entry{}
 		entry.Description = c.Post("description", true)
@@ -34,8 +38,16 @@ func Admin(c *Controller) {
 			}
 		}
 	} else if "/admin/post.html" == p {
+		mainCats := c.db.AllMainCats()
+		n := len(mainCats)
+		cattmpl := make([]dbctx.CatLstTmpl, n, n)
+		for i := 0; i < n; i++ {
+			cattmpl[i].Deep = 0
+			cattmpl[i].Root = mainCats[i]
+			cattmpl[i].Relatives = c.db.CatTree(mainCats[i].CatId)
+		}
 		data := c.NewViewData("New Post")
-		data["Cats"] = c.db.AllCats()
+		data["Cats"] = cattmpl
 		c.View("post.tmpl", data)
 	} else if "/admin/cat_submit.html" == p {
 		if len(c.Post("name", false)) > 0 {

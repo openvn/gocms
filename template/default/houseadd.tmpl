@@ -20,7 +20,7 @@
 		</p>
 		<p>
 			<span>Gioi tinh</span>
-			<input type="checkbox" value="Female" name="Gender" />Nu
+			<input type="checkbox" value="1" name="Gender" />Nu
 		</p>
 		<p>
 			<span>Nam sinh</span>
@@ -52,7 +52,7 @@
 		</p>
 		<p>
 			<span>Dang di hoc</span>
-			<input type="checkbox" value="true" name="AttendingSchool" />
+			<input type="checkbox" value="1" name="AttendingSchool" />
 		</p>
 		<p>
 			<span>Lop</span>
@@ -62,13 +62,17 @@
 		</p>
 		<p>
 			<span>Dang di lam</span>
-			<input type="checkbox" value="true" name="Working" />
+			<input type="checkbox" value="1" name="Working" />
 		</p>
 		<p>
 			<span>Cong viec</span>
 			<input style="width:100px" type="text" name="WorkTitle" />
 			Dia chi
 			<input style="width:100px" type="text" name="Office" />
+		</p>
+		<p>
+			<span>Co thu nhap</span>
+			<input type="checkbox" value="1" name="Incomes" />
 		</p>
 		<p>
 			<span>Thu nhap</span>
@@ -88,9 +92,13 @@
 			<span>ghi chu</span>
 			<input type="text" name="Note" />
 		</p>
+		<p style="padding-top: 15px">
+			<span>&nbsp;</span>
+			<input class="submit" type="submit" name="submit" value="submit">
+		</p>
 	</div>
 </form>
 <script>
-$("#Birth").datepicker("option", "dateFormat", "dd/mm/yy");
+$("#Birth").datepicker({dateFormat:"dd/mm/yy"});
 </script>
 {{end}}
